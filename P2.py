@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-from skimage.morphology import skeletonize
+from skimage.morphology import skeletonize, remove_small_objects
 from skimage import data
 import matplotlib.pyplot as plt
 from skimage.util import invert
@@ -17,17 +17,20 @@ def getMin(cnt):
     return np.array([np.min(cnt[:,1]),np.min(cnt[:,0])],dtype=np.int)
 
 def findLimts(skel):
-    limitPoint = []
-    contours = cv2.findContours(skel, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    for cnts in contours:
-        if type(cnts) == list:
-            for cnt in cnts:
-                limitPoint.append(getMax(cnt))
-                limitPoint.append(getMin(cnt))
-        else:
-            cnt = cnts
-            limitPoint.append(getMax(cnt))
-            limitPoint.append(getMin(cnt))
+    limitPoint = np.ones(skel.shape,dtype=bool)
+
+    # TODO: Buscar los puntos donde no se aplicara la busqueda de los puntos de terminacion y de bifurcacion
+    #
+    # contours = cv2.findContours(skel, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # for cnts in contours:
+    #     if type(cnts) == list:
+    #         for cnt in cnts:
+    #             limitPoint[getMax(cnt)] = False
+    #             limitPoint[getMin(cnt)] = False
+    #     else:
+    #         cnt = cnts
+    #         limitPoint[getMax(cnt)] = False
+    #         limitPoint[getMin(cnt)] = False
     return limitPoint
 
 def findKeypoints(skel,limitPoint):
@@ -38,12 +41,12 @@ def findKeypoints(skel,limitPoint):
     # [whitepoint[0][0], whitepoint[1][0]
     for xy in whitepoint:
         # TODO: si pertenece xy a los limites no usar
-        if not np.any(limitPoint==xy):
-            num = np.count_nonzero(skel[xy[0]-1:xy[0]+2,xy[1]-1:xy[1]+2])-1
-            if num==1:
-                endPoint.append(xy)
-            if num > 2:
-                forkPoint.append(xy)
+        # if not np.any(limitPoint==xy):
+        num = np.count_nonzero(skel[xy[0]-1:xy[0]+2,xy[1]-1:xy[1]+2])-1
+        if num==1:
+            endPoint.append(xy)
+        if num > 2:
+            forkPoint.append(xy)
 
     return endPoint,forkPoint
 
@@ -54,7 +57,7 @@ def drawPoint(image,lst_point,color):
     return out
 
 if __name__=="__main__":
-    img = cv2.imread('huellasFVC04/101_2.tif', 0)
+    img = cv2.imread('huellasFVC04/102_3.tif', 0)
     img = 255*np.ones(img.shape)-img
     img = img.astype(np.uint8)
     img_logical = np.logical_and(img>100,img>101)
@@ -66,6 +69,8 @@ if __name__=="__main__":
 
 
     skeleton = skeletonize(img_logical)
+    # TODO: small_objects
+    # skeleton = remove_small_objects(skeleton)
 
     # display results
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(8, 4),
