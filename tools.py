@@ -31,6 +31,7 @@ def calcSkel(img_logical):
 
 ########## Paso 3 ##########
 def findLimts(skel):
+    #TODO: eliminar motas
     mask = np.ones(skel.shape,dtype=bool)
     # Buscamos el punto min y max de cada fila
     whitepoint = np.asarray(np.where(skel==255)).T
@@ -64,7 +65,7 @@ def findKeypoints(skel,mask):
 
     return endPoint,forkPoint
 
-
+########## Paso 5 ##########
 def drawPoint(image,lst_point,color):
     out = image.copy()
     for xy in lst_point:
@@ -74,13 +75,12 @@ def drawPoint(image,lst_point,color):
 def drawCircle(image,lst_point,color):
     out = image.copy()
     for xy in lst_point:
-        cv2.circle(out,(xy[1],xy[0]),1,color,1)
+        cv2.circle(out,(xy[1],xy[0]),1,color,2)
     return out
 
 
 
 
-#### Plot fuction #######
 def plot2images(img1,img2,title1='img1',title2='img2',visu=False):
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(8, 4),
                              sharex=True, sharey=True)
