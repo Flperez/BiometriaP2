@@ -19,6 +19,7 @@ def main(input,output,visu=False):
         # 4.- Buscamos los puntos finales y de bifurcacion
         endPoint, forkPoint = findKeypoints(skel_image,mask)
 
+        #TODO: quitar motas y guardar imagenes en output
 
 
         if visu:
@@ -33,6 +34,7 @@ def main(input,output,visu=False):
             out = drawCircle(out, forkPoint, (0, 255, 0))
 
             plot2images(skel_logical,out)
+
 
 
 if __name__=="__main__":
