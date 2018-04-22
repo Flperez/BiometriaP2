@@ -24,7 +24,7 @@ def main(input,output,visu=False):
 
         if visu:
             # plot2images(img_invert,img_logical)
-            # plot2images(img_logical,skel_logical)
+            plot2images(img_logical,skel_logical,visu=visu)
             # plot2images(skel_logical,skel_image)
             out = cv2.cvtColor(img_invert.copy(),cv2.COLOR_GRAY2RGB)
             # out = drawPoint(out, endPoint, (255, 0, 0))
@@ -33,7 +33,7 @@ def main(input,output,visu=False):
             out = drawCircle(out, endPoint, (255, 0, 0))
             out = drawCircle(out, forkPoint, (0, 255, 0))
 
-            plot2images(skel_logical,out)
+            # plot2images(skel_logical,out)
 
 
 

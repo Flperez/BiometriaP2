@@ -81,7 +81,7 @@ def drawCircle(image,lst_point,color):
 
 
 #### Plot fuction #######
-def plot2images(img1,img2,title1='img1',title2='img2'):
+def plot2images(img1,img2,title1='img1',title2='img2',visu=False):
     fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(8, 4),
                              sharex=True, sharey=True)
     ax = axes.ravel()
@@ -95,7 +95,9 @@ def plot2images(img1,img2,title1='img1',title2='img2'):
     ax[1].set_title(title2, fontsize=20)
 
     fig.tight_layout()
-    plt.show()
+    if visu:
+        plt.show()
+    return fig
 
 def plot4images(images,titles):
     for i in range(4):
