@@ -2,6 +2,8 @@ import argparse
 from tools import *
 import os
 from natsort import natsorted
+from skimage.util import invert
+
 
 
 def main(input,output,visu=False):
@@ -31,14 +33,17 @@ def main(input,output,visu=False):
             out = cv2.cvtColor(img_invert.copy(), cv2.COLOR_GRAY2RGB)
             out = drawCircle(out, endPoint, (255, 0, 0))
             out = drawCircle(out, forkPoint, (0, 255, 0))
-            fig3 = plot2images(skel_logical, out, 'binaria', 'resultado', visu)
+            plot2images(skel_logical, invert(mask), 'esqueletizacion', 'mascara', visu)
+            fig3 = plot2images(skel_logical, out, 'esqueletizacion', 'resultado', visu)
+
             if output:
                 path_image = os.path.join(output,name.split('.')[0])
                 if not os.path.isdir(path_image):
                     os.mkdir(path_image)
-                fig1.savefig(os.path.join(path_image,"huella_vs_binaria.png"))
-                fig2.savefig(os.path.join(path_image,"binaria_vs_skel.png"))
-                fig3.savefig(os.path.join(path_image,"skel_vs_result.png"))
+                cv2.imwrite(os.path.join(path_image,"invertida.png"),img_invert)
+                cv2.imwrite(os.path.join(path_image,"binaria.png"),255*img_logical.astype(np.uint8))
+                cv2.imwrite(os.path.join(path_image,"skel.png"),skel_image)
+                cv2.imwrite(os.path.join(path_image,"result.png"),out)
 
 
 

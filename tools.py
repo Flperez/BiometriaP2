@@ -31,8 +31,27 @@ def calcSkel(img_logical):
 
 ########## Paso 3 ##########
 def findLimts(skel):
-    #TODO: eliminar motas
+    # Inicializamos a True la mascara
     mask = np.ones(skel.shape,dtype=bool)
+
+    # Buscamos las motas
+    threshold = 10
+    smooth=np.array([],dtype=np.int)
+
+    _, cnts, _ = cv2.findContours(skel, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    for cnt in cnts:
+        cnt = np.reshape(cnt, (-1, 2))
+        amount = cnt.shape[0]
+        if amount < threshold:
+            smooth = np.append(smooth, cnt)
+
+    smooth = np.reshape(smooth, (-1, 2))
+    for id_smooth in smooth:
+        mask[id_smooth[1], id_smooth[0]] = False
+        skel[id_smooth[1], id_smooth[0]] = 0
+
+
+
     # Buscamos el punto min y max de cada fila
     whitepoint = np.asarray(np.where(skel==255)).T
     fil_unique,indexes = np.unique(whitepoint[:,0],return_index=True)
@@ -43,9 +62,15 @@ def findLimts(skel):
         minimum = np.min(points[:,1])
         lst_limits = np.append(lst_limits,np.array([fil_unique[x],maximum]))
         lst_limits = np.append(lst_limits,np.array([fil_unique[x],minimum]))
-    lst_limits = np.reshape(lst_limits,(-1,2))
+
+    lst_limits = np.reshape(lst_limits, (-1, 2))
     for limit in lst_limits:
-        mask[limit[0], limit[1]]=False
+        mask[limit[0], limit[1]] = False
+
+
+
+
+
 
     return mask
 
