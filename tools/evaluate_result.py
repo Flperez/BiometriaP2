@@ -39,5 +39,5 @@ if __name__=="__main__":
                                          os.path.join(path_result, name + "_fork.txt"))
 
     print("---------",name,"---------")
-    print("endPoints: corrects:%d false positives:%d".format(endcorrect,endfalse))
-    print("forkPoints: corrects:%d false positives:%d".format(forkcorrect,forkfalse))
+    print("endPoints: corrects:{:d} false positives:{:d}".format(endcorrect,endfalse))
+    print("forkPoints: corrects:{:d} false positives:{:d}".format(forkcorrect,forkfalse))
