@@ -6,7 +6,7 @@ from skimage.morphology import skeletonize, remove_small_objects
 
 
 ########## Paso 1 ##########
-def load_image(path):
+def load_image(path,flag):
     # Load image
     img = cv2.imread(path, 0)
 
@@ -19,6 +19,10 @@ def load_image(path):
     th3 =  cv2.adaptiveThreshold(blur,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
     img_logical = 255 * np.ones(img.shape) - th3
     img_logical = np.logical_and(img_logical > 170, img_logical > 171)
+
+    if flag==1:
+        img = cv2.cvtColor(img,cv2.COLOR_GRAY2RGB)
+        img_invert = cv2.cvtColor(img_invert,cv2.COLOR_GRAY2RGB)
     return img,img_invert,img_logical
 
 
@@ -104,6 +108,10 @@ def drawCircle(image,lst_point,color):
     return out
 
 
+def savePoints(lst_point,path):
+    with open(path,'w') as file:
+        for xy in lst_point:
+            file.write("%d %d\n"%(xy[1],xy[0]))
 
 
 def plot2images(img1,img2,title1='img1',title2='img2',visu=False):

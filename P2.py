@@ -11,7 +11,7 @@ def main(input,output,visu=False):
     for name in names:
         print("\nImage: ",name)
         # 1.- Cargamos las imagenes
-        img, img_invert, img_logical = load_image(os.path.join(input,name))
+        img, img_invert, img_logical = load_image(os.path.join(input,name),0)
 
         # 2.- Esqueletizamos la huella
         skel_logical, skel_image = calcSkel(img_logical)
@@ -44,6 +44,8 @@ def main(input,output,visu=False):
                 cv2.imwrite(os.path.join(path_image,"binaria.png"),255*img_logical.astype(np.uint8))
                 cv2.imwrite(os.path.join(path_image,"skel.png"),skel_image)
                 cv2.imwrite(os.path.join(path_image,"result.png"),out)
+                savePoints(endPoint,os.path.join(path_image,name.split('.')[0]+"_end.txt"))
+                savePoints(forkPoint,os.path.join(path_image,name.split('.')[0]+"_fork.txt"))
 
 
 
