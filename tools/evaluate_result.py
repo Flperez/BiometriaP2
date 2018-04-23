@@ -31,13 +31,15 @@ if __name__=="__main__":
     path_result = args['result']
 
     ## Endpoint ##
-    name = path_gt.split('/')[-1]
-    endcorrect,endfalse = evaluatePoint(os.path.join(path_gt,name+"_end.txt"),
-                                          os.path.join(path_result,name+"_end.txt"))
-    ## Fork point ##
-    forkcorrect, forkfalse = evaluatePoint(os.path.join(path_gt, name + "_fork.txt"),
-                                         os.path.join(path_result, name + "_fork.txt"))
+    folders_gt = os.listdir(path_gt)
+    for folder_gt in folders_gt:
+        name = os.path.join(path_gt,folder_gt).split('/')[-1]
+        endcorrect,endfalse = evaluatePoint(os.path.join(path_gt,name,name+"_end.txt"),
+                                              os.path.join(path_result,name,name+"_end.txt"))
+        ## Fork point ##
+        forkcorrect, forkfalse = evaluatePoint(os.path.join(path_gt,name, name + "_fork.txt"),
+                                             os.path.join(path_result,name, name + "_fork.txt"))
 
-    print("---------",name,"---------")
-    print("endPoints: corrects:{:d} false positives:{:d}".format(endcorrect,endfalse))
-    print("forkPoints: corrects:{:d} false positives:{:d}".format(forkcorrect,forkfalse))
+        print("---------",name,"---------")
+        print("endPoints: corrects:{:d} false positives:{:d}".format(endcorrect,endfalse))
+        print("forkPoints: corrects:{:d} false positives:{:d}".format(forkcorrect,forkfalse))
